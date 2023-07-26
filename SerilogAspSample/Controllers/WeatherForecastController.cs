@@ -31,7 +31,7 @@ namespace SerilogAspSample.Controllers
             })
             .ToArray();
 
-            _logger.LogInformation($"Weather forecasts: {result}");
+            _logger.LogInformation("Weather forecasts: {@Result}", result);
 
             return result;
         }
@@ -39,7 +39,7 @@ namespace SerilogAspSample.Controllers
         [HttpGet("GetForecast/country")]
         public ActionResult<IEnumerable<WeatherForecast>> GetByCountry(string country)
         {
-            _logger.LogInformation($"Get forecast was called for :{country}");
+            _logger.LogInformation("Get forecast was called for :{@Country}", country);
 
             if (string.IsNullOrEmpty(country) || country.Length < 2)
             {
@@ -55,7 +55,7 @@ namespace SerilogAspSample.Controllers
             })
             .ToArray();
 
-            _logger.LogInformation($"Weather forecasts: {result}");
+            _logger.LogInformation("Weather forecasts: {@Result}", result);
 
             return Ok(result);
         }
