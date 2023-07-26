@@ -18,7 +18,7 @@ namespace SerilogAspSample.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
+        [HttpGet("GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
             _logger.LogInformation("Get forecast was called.");
@@ -34,6 +34,30 @@ namespace SerilogAspSample.Controllers
             _logger.LogInformation($"Weather forecasts: {result}");
 
             return result;
+        }
+
+        [HttpGet("GetForecast/country")]
+        public ActionResult<IEnumerable<WeatherForecast>> GetByCountry(string country)
+        {
+            _logger.LogInformation($"Get forecast was called for :{country}");
+
+            if (string.IsNullOrEmpty(country) || country.Length < 2)
+            {
+                _logger.LogError($"Bad country parameter");
+                return BadRequest();
+            }
+
+            var result = Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            {
+                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                TemperatureC = Random.Shared.Next(-20, 55),
+                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+            })
+            .ToArray();
+
+            _logger.LogInformation($"Weather forecasts: {result}");
+
+            return Ok(result);
         }
     }
 }
